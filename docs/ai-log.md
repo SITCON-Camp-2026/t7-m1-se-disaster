@@ -30,6 +30,7 @@
 | 10:00 | Phase 0 | 初步整理與標註草稿 | Agent 草擬 `docs/phase0-observations.md`、彙整 `src/fixtures/phase-0/messy-reports.json` 的重點樣本，並建議在 UI 上標註 `needs_review` / `verify:location` / `sensitive` 標籤；同時執行專案格式化、測試與啟動開發伺服器以便展示。 | 採用（部分） | 採用：自動化檢查（format/test/build）與草稿觀察；拒絕：不自動把社群或二手資訊標為 verified，需要人工確認且注意隱私處理。 | `docs/phase0-observations.md`, `src/fixtures/phase-0/messy-reports.json` |
 | 11:38 | Phase 0 | 新增工作台刪除按鈕 | Agent 建議在 `整理工作台` 每筆原始資訊旁新增「刪除」按鈕，讓使用者能直接移除不需要的紀錄。 | 採用 | 採用：符合使用者需求與 UI 優化，並避免保留不必要資料。 | `src/app/App.tsx`, `src/features/phase-0/Phase0Workbench.tsx` |
 | 14:20 | Phase 0 | 啟用 persona sub-agent 模擬使用者訪談 | Agent 建議根據 `release-packs/01-interview-kit/docs/personas/*.md` 的三個 persona，針對目前 prototype 提供使用者回饋，並整理成 `release-packs/01-interview-kit/docs/interview-notes.md`。 | 採用 | 採用：這是課程要求的使用者訪談模擬，且能讓我們更早看見不同角色對介面的關注點；人類仍保留最後修訂權，並補上不應被視為正式需求的提醒。 | `release-packs/01-interview-kit/docs/interview-notes.md`, `docs/ai-log.md` |
+| 15:10 | Release 02 | 建立流程設計草稿 | Agent 建議把原始資訊、人工確認、候選結果與判斷紀錄整理成 Mermaid flowchart，並加入「暫不採用」分支，避免未確認內容被直接視為任務。 | 採用 | 採用：這個流程把「資訊是否足夠」與「是否可成為任務」拆開，並保留人工確認與判斷理由紀錄，符合流程設計要求。 | `release-packs/02-flow-design-kit/docs/flow.md` |
 
 ## 範例
 

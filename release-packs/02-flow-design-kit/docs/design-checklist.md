@@ -6,7 +6,7 @@
 
 ## 1. 使用者與目標
 
-- [ ] 流程有對應 `docs/decisions.md` 中選定的主要使用者。
+- [ ] 流程有對應 `release-packs/01-interview-kit/docs/decisions.md` 中選定的主要使用者。
 - [ ] 流程有幫這個使用者完成一件明確的事。
 - [ ] 流程沒有試圖同時服務所有人。
 
