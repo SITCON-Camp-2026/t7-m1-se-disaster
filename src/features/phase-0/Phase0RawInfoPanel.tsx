@@ -2,6 +2,7 @@ import { SourceLabel } from "../../components/SourceLabel";
 import { StatusBadge } from "../../components/StatusBadge";
 import { formatDateTime } from "../../lib/date";
 import type { Phase0MessyRecord } from "./phase0-types";
+import { QUALITY_ISSUE_LABELS, QUALITY_ISSUE_COLORS } from "./quality-issues";
 
 export function Phase0RawInfoPanel({
   records,
@@ -42,6 +43,16 @@ export function Phase0RawInfoPanel({
                 {record.annotationsNeeded.map((a) => (
                   <span key={a} style={{ marginRight: 6, padding: '2px 6px', background: '#fff3cd', borderRadius: 4, fontSize: 12 }}>
                     需確認：{a}
+                  </span>
+                ))}
+              </div>
+            ) : null}
+
+            {record.qualityIssues && record.qualityIssues.length > 0 ? (
+              <div style={{ marginTop: 8 }}>
+                {record.qualityIssues.map((q) => (
+                  <span key={q} style={{ marginRight: 6, padding: '2px 6px', background: QUALITY_ISSUE_COLORS[q] ?? '#e9ecef', borderRadius: 4, fontSize: 12 }}>
+                    {QUALITY_ISSUE_LABELS[q] ?? q}
                   </span>
                 ))}
               </div>

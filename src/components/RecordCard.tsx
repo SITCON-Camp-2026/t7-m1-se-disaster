@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { SourceLabel } from "./SourceLabel";
 import { StatusBadge } from "./StatusBadge";
 import { formatDateTime } from "../lib/date";
+import { QUALITY_ISSUE_LABELS, QUALITY_ISSUE_COLORS } from "../features/phase-0/quality-issues";
 
 type RecordLike = {
   id: string;
@@ -50,6 +51,16 @@ export function RecordCard({ record, onUpdateRecord }: { record: RecordLike; onU
       {record.sensitive ? (
         <div style={{ marginTop: 8 }}>
           <span style={{ color: '#721c24', background: '#f8d7da', padding: '2px 6px', borderRadius: 4, fontSize: 12 }}>敏感資訊，需取得當事人同意</span>
+        </div>
+      ) : null}
+
+      {record.qualityIssues && record.qualityIssues.length > 0 ? (
+        <div style={{ marginTop: 8 }}>
+          {record.qualityIssues.map((q: string) => (
+            <span key={q} style={{ marginRight: 6, padding: '2px 6px', background: QUALITY_ISSUE_COLORS[q] ?? '#e9ecef', borderRadius: 4, fontSize: 12 }}>
+              {QUALITY_ISSUE_LABELS[q] ?? q}
+            </span>
+          ))}
         </div>
       ) : null}
 
