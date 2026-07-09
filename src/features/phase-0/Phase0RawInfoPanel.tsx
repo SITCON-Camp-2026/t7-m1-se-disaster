@@ -2,7 +2,7 @@ import { SourceLabel } from "../../components/SourceLabel";
 import { StatusBadge } from "../../components/StatusBadge";
 import { formatDateTime } from "../../lib/date";
 import type { Phase0MessyRecord } from "./phase0-types";
-import { QUALITY_ISSUE_LABELS, QUALITY_ISSUE_COLORS } from "./quality-issues";
+import { QUALITY_ISSUE_LABELS, QUALITY_ISSUE_COLORS, computeSeverityForIssues, QUALITY_SEVERITY_COLORS } from "./quality-issues";
 
 export function Phase0RawInfoPanel({
   records,
@@ -31,7 +31,20 @@ export function Phase0RawInfoPanel({
           >
             <div className="record-card__header">
               <h3>{record.id}</h3>
-              <StatusBadge status={record.verificationStatus} />
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                <StatusBadge status={record.verificationStatus} />
+                {record.qualityIssues && record.qualityIssues.length > 0 ? (
+                  (() => {
+                    const sev = computeSeverityForIssues(record.qualityIssues);
+                    const label = sev === 'high' ? '品質：高' : sev === 'medium' ? '品質：中' : '品質：低';
+                    return (
+                      <span style={{ padding: '2px 6px', background: QUALITY_SEVERITY_COLORS[sev] ?? '#e9ecef', borderRadius: 4, fontSize: 12 }}>
+                        {label}
+                      </span>
+                    );
+                  })()
+                ) : null}
+              </div>
             </div>
             <p>{record.rawText}</p>
             <div className="record-card__meta">

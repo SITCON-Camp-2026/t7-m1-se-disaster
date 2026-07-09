@@ -49,3 +49,48 @@ export const QUALITY_ISSUE_COLORS: Record<string, string> = {
   unclear_reason: '#f1f3f5',
   actionable_without_context: '#f8d7da',
 };
+
+export const QUALITY_ISSUE_SEVERITY: Record<string, "low" | "medium" | "high"> = {
+  ambiguous_location: "medium",
+  vague_counts: "medium",
+  no_late_timestamp: "low",
+  uncertain_current_status: "medium",
+  possible_outdated_info: "medium",
+  unclear_counts: "low",
+  second_hand: "low",
+  duplicate_possible: "low",
+  unknown_source_date: "medium",
+  unverified_official_status: "high",
+  conflicting_on_site_reports: "high",
+  uncertain_safety: "high",
+  stale_information: "medium",
+  time_sensitive: "medium",
+  needs_recheck_at_timestamp: "low",
+  personal_data: "high",
+  no_consent: "high",
+  remote_report: "low",
+  no_on_site_confirmation: "medium",
+  partial_access_rules: "medium",
+  no_official_confirmation: "high",
+  unclear_reason: "low",
+  actionable_without_context: "high",
+};
+
+export const QUALITY_SEVERITY_COLORS: Record<string, string> = {
+  high: '#f8d7da',
+  medium: '#fff3cd',
+  low: '#d1e7dd',
+};
+
+export function computeSeverityForIssues(issues: string[] | undefined): "low" | "medium" | "high" {
+  if (!issues || issues.length === 0) return 'low';
+  let severityRank = { high: 3, medium: 2, low: 1 };
+  let best: "low" | "medium" | "high" = 'low';
+  for (const q of issues) {
+    const s = QUALITY_ISSUE_SEVERITY[q] ?? 'low';
+    if (severityRank[s] > severityRank[best]) best = s;
+    if (best === 'high') break;
+  }
+  return best;
+}
+
