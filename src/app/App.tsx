@@ -4,6 +4,7 @@ import { EmptyState } from "../components/EmptyState";
 import { Phase0RawInfoPanel } from "../features/phase-0/Phase0RawInfoPanel";
 import { Phase0Workbench } from "../features/phase-0/Phase0Workbench";
 import type { Phase0MessyRecord } from "../features/phase-0/phase0-types";
+import { V1FlowWorkbench } from "../features/v1/V1FlowWorkbench";
 
 type TabKey = "raw" | "workbench";
 
@@ -15,9 +16,11 @@ const tabs: Array<{ key: TabKey; label: string }> = [
 const phase0Records = messyReports satisfies Phase0MessyRecord[];
 
 export function App() {
+  const isV1Route =
+    typeof window !== "undefined" && window.location.pathname.startsWith("/v1");
   const [activeTab, setActiveTab] = useState<TabKey>("raw");
-  const [records, setRecords] = useState<Phase0MessyRecord[]>(
-    () => phase0Records.map((r) => ({ ...r })),
+  const [records, setRecords] = useState<Phase0MessyRecord[]>(() =>
+    phase0Records.map((r) => ({ ...r })),
   );
   const [selectedRecordId, setSelectedRecordId] = useState(
     records[0]?.id ?? "",
@@ -31,7 +34,9 @@ export function App() {
   }
 
   function updateRecord(recordId: string, changes: Partial<Phase0MessyRecord>) {
-    setRecords((prev) => prev.map((r) => (r.id === recordId ? { ...r, ...changes } : r)));
+    setRecords((prev) =>
+      prev.map((r) => (r.id === recordId ? { ...r, ...changes } : r)),
+    );
   }
 
   function deleteRecord(recordId: string) {
@@ -52,7 +57,8 @@ export function App() {
       })
       .filter((value) => !Number.isNaN(value));
 
-    const maxExisting = currentNumbers.length > 0 ? Math.max(...currentNumbers) : 0;
+    const maxExisting =
+      currentNumbers.length > 0 ? Math.max(...currentNumbers) : 0;
     const nextNumber = Math.max(maxExisting + 1, 13);
 
     return `M-${String(nextNumber).padStart(3, "0")}`;
@@ -96,6 +102,10 @@ export function App() {
     setIsCreatingRecord(false);
   }
 
+  if (isV1Route) {
+    return <V1FlowWorkbench records={records} />;
+  }
+
   return (
     <main className="layout">
       <header className="hero">
@@ -105,6 +115,9 @@ export function App() {
           第一階段先用 coding agent
           做出可展示的前端原型，再從成果中看見資料品質、角色、狀態與來源的限制。
         </p>
+        <a className="hero__link" href="/v1/">
+          前往 v1 行動前資訊檢查工作台
+        </a>
       </header>
 
       <nav className="tabs" aria-label="第一階段工作區">
@@ -120,14 +133,21 @@ export function App() {
         ))}
         <button
           type="button"
-          className={`tab-add-button ${isCreatingRecord ? 'tab-add-button--active' : ''}`}
+          className={`tab-add-button ${isCreatingRecord ? "tab-add-button--active" : ""}`}
           onClick={addRecord}
         >
           新增資料
         </button>
       </nav>
       {isCreatingRecord ? (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 8,
+            marginBottom: 16,
+          }}
+        >
           <label htmlFor="new-record-content" style={{ fontWeight: 600 }}>
             新增資料內容
           </label>
@@ -138,20 +158,20 @@ export function App() {
             onChange={(event) => setNewRecordText(event.target.value)}
             rows={4}
             style={{
-              width: '100%',
+              width: "100%",
               padding: 10,
               borderRadius: 12,
-              border: '1px solid #cfd8e3',
-              backgroundColor: '#ffffff',
-              color: '#000000',
-              caretColor: '#000000',
-              fontFamily: 'inherit',
+              border: "1px solid #cfd8e3",
+              backgroundColor: "#ffffff",
+              color: "#000000",
+              caretColor: "#000000",
+              fontFamily: "inherit",
               fontSize: 16,
               lineHeight: 1.5,
             }}
             placeholder="請在這裡輸入要新增的原始資訊內容"
           />
-          <div style={{ display: 'flex', gap: 12 }}>
+          <div style={{ display: "flex", gap: 12 }}>
             <button type="button" onClick={createRecord}>
               送出新增
             </button>

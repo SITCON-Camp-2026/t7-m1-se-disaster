@@ -26,6 +26,7 @@ export type Phase0MessyRecord = {
   annotationsNeeded?: string[];
   qualityIssues?: string[];
   qualitySeverity?: string;
+  reviewNotes?: string;
   draft?: {
     editable: boolean;
     content: string;

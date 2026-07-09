@@ -45,6 +45,20 @@ button {
   line-height: 1.7;
 }
 
+.hero__link,
+.v1-home-link {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  border: 1px solid #245d9d;
+  border-radius: 8px;
+  padding: 9px 12px;
+  background: #245d9d;
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
 .eyebrow {
   margin: 0 0 8px;
   font-weight: 700;
@@ -349,12 +363,264 @@ button {
   color: #9f1f17;
 }
 
+.v1-layout {
+  width: min(1320px, calc(100% - 32px));
+}
+
+.v1-hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.v1-home-link {
+  flex: 0 0 auto;
+  border-color: #cfd8e3;
+  background: #ffffff;
+  color: #245d9d;
+}
+
+.v1-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.v1-summary div,
+.v1-list,
+.v1-raw-card,
+.v1-flow-card,
+.v1-review-form,
+.v1-evidence,
+.v1-route {
+  border: 1px solid #dbe4ef;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.v1-summary div {
+  display: grid;
+  gap: 4px;
+  padding: 16px;
+}
+
+.v1-summary strong {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.v1-summary span {
+  color: #5f6b7a;
+}
+
+.v1-workbench {
+  display: grid;
+  grid-template-columns: minmax(220px, 280px) minmax(0, 1fr) minmax(
+      280px,
+      340px
+    );
+  gap: 16px;
+  align-items: start;
+}
+
+.v1-list,
+.v1-detail,
+.v1-review {
+  display: grid;
+  gap: 12px;
+}
+
+.v1-list,
+.v1-raw-card,
+.v1-flow-card,
+.v1-review-form,
+.v1-evidence {
+  padding: 16px;
+}
+
+.v1-section-heading h2 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.v1-list button {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  border: 1px solid #dbe4ef;
+  border-radius: 8px;
+  padding: 10px;
+  background: #fbfcfe;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.v1-list button.active {
+  border-color: #245d9d;
+  background: #eef6ff;
+}
+
+.v1-list button span {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.v1-list small,
+.v1-list em,
+.v1-review-note {
+  color: #5f6b7a;
+  font-size: 0.88rem;
+  font-style: normal;
+}
+
+.v1-list em {
+  white-space: nowrap;
+}
+
+.v1-raw-card h2 {
+  margin: 0;
+}
+
+.v1-gates {
+  display: grid;
+  gap: 10px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.v1-gate {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 12px;
+  border: 1px solid #dbe4ef;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.v1-gate span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.v1-gate strong {
+  display: block;
+}
+
+.v1-gate p {
+  margin: 4px 0 0;
+  color: #5f6b7a;
+  line-height: 1.55;
+}
+
+.v1-gate--ok span {
+  background: #dff7e8;
+  color: #116b37;
+}
+
+.v1-gate--needs_review span {
+  background: #fff3cd;
+  color: #8a5a00;
+}
+
+.v1-route {
+  display: grid;
+  gap: 6px;
+  padding: 16px;
+  border-left-width: 5px;
+}
+
+.v1-route span {
+  color: #5f6b7a;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.v1-route strong {
+  font-size: 1.2rem;
+}
+
+.v1-route p {
+  margin: 0;
+  line-height: 1.55;
+}
+
+.v1-route--candidate {
+  border-left-color: #245d9d;
+}
+
+.v1-route--manual_review {
+  border-left-color: #d89000;
+}
+
+.v1-route--defer {
+  border-left-color: #9f1f17;
+}
+
+.v1-review-form label {
+  display: grid;
+  gap: 6px;
+  margin-top: 12px;
+  font-weight: 700;
+}
+
+.v1-review-form input,
+.v1-review-form select,
+.v1-review-form textarea {
+  width: 100%;
+  border: 1px solid #cfd8e3;
+  border-radius: 8px;
+  padding: 9px 10px;
+  color: #17202a;
+  font: inherit;
+  font-weight: 400;
+}
+
+.v1-review-form textarea {
+  resize: vertical;
+}
+
+.v1-evidence h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
+.v1-evidence ul {
+  margin: 0;
+  padding-left: 20px;
+  line-height: 1.6;
+}
+
 @media (max-width: 860px) {
   .workbench__layout {
     grid-template-columns: 1fr;
   }
 
   .judgement-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .v1-hero,
+  .panel__header {
+    display: grid;
+  }
+
+  .v1-summary,
+  .v1-workbench {
+    grid-template-columns: 1fr;
+  }
+
+  .v1-gate {
     grid-template-columns: 1fr;
   }
 }
