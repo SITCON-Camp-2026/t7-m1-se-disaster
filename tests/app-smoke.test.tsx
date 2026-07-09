@@ -1,8 +1,11 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import { App } from "../src/app/App";
 
 describe("App", () => {
+  beforeEach(() => {
+    window.history.pushState({}, "", "/");
+  });
   it("renders starter title", () => {
     render(<App />);
     expect(screen.getByText("災害資訊整理工作台")).toBeInTheDocument();
@@ -57,5 +60,18 @@ describe("App", () => {
     expect(
       screen.queryByText(/已產生 \d+ 筆安全邊界草稿/),
     ).not.toBeInTheDocument();
+  });
+
+  it("renders a dedicated v1 overview when the path is /v1/", () => {
+    window.history.pushState({}, "", "/v1/");
+
+    render(<App />);
+
+    expect(screen.getByText("V1 版整理檢視")).toBeInTheDocument();
+    expect(
+      screen.getByText(/資料來源仍來自 Phase 0 原始資訊/),
+    ).toBeInTheDocument();
+    expect(screen.getAllByText("待人工確認").length).toBeGreaterThan(0);
+    expect(screen.queryByRole("button", { name: "原始資訊" })).not.toBeInTheDocument();
   });
 });
