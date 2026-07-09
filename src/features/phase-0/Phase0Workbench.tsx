@@ -81,6 +81,7 @@ export function Phase0Workbench({
           <Phase0JudgementCard
             judgement={safetyBoundary}
             record={selectedRecord}
+            onUpdateRecord={onUpdateRecord}
           />
         </div>
 
