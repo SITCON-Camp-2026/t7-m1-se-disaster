@@ -23,6 +23,18 @@ export type Phase0MessyRecord = {
   sourceType: string;
   verificationStatus: string;
   updatedAt: string;
+  annotationsNeeded?: string[];
+  qualityIssues?: string[];
+  qualitySeverity?: string;
+  draft?: {
+    editable: boolean;
+    content: string;
+    status: string;
+    lastEditedAt: string | null;
+    lastEditedBy: string | null;
+  };
+  draftJudgement?: Phase0JudgementDraft;
+  sensitive?: boolean;
 };
 
 export type Phase0JudgementDraft = {

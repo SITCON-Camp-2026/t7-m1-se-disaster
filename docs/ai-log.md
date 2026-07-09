@@ -27,6 +27,9 @@
 | ---- | ---- | ---- | --------------- | ----------- | ------------ | ----------------- |
 |      |      |      |                 |             |              |                   |
 
+| 10:00 | Phase 0 | 初步整理與標註草稿 | Agent 草擬 `docs/phase0-observations.md`、彙整 `src/fixtures/phase-0/messy-reports.json` 的重點樣本，並建議在 UI 上標註 `needs_review` / `verify:location` / `sensitive` 標籤；同時執行專案格式化、測試與啟動開發伺服器以便展示。 | 採用（部分） | 採用：自動化檢查（format/test/build）與草稿觀察；拒絕：不自動把社群或二手資訊標為 verified，需要人工確認且注意隱私處理。 | `docs/phase0-observations.md`, `src/fixtures/phase-0/messy-reports.json` |
+| 11:38 | Phase 0 | 新增工作台刪除按鈕 | Agent 建議在 `整理工作台` 每筆原始資訊旁新增「刪除」按鈕，讓使用者能直接移除不需要的紀錄。 | 採用 | 採用：符合使用者需求與 UI 優化，並避免保留不必要資料。 | `src/app/App.tsx`, `src/features/phase-0/Phase0Workbench.tsx` |
+
 ## 範例
 
 | 時間  | 階段    | 任務         | AI / Agent 建議                        | 採用 / 拒絕 | 人類判斷理由                              | 相關檔案 / commit             |
@@ -44,5 +47,13 @@
 -
 
 ### 下次使用 AI 開發前，我們會先準備
+
+
+### 本次簡短採用記錄
+
+- Agent 執行：格式化、測試、建置檢查、啟動 dev server（供展示）。
+- Agent 產出：`docs/phase0-observations.md` 草稿、`messy-reports` 摘要與需人工確認樣本清單。
+- 人類採用決策：接受草稿作為內部觀察草案，保留 `needs_review` 標記，不將任何未驗證資訊標為已確認。 
+
 
 -

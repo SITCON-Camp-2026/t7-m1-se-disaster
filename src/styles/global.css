@@ -74,10 +74,47 @@ button {
   color: white;
 }
 
+.tab-add-button {
+  border-color: #cfd8e3;
+  background: #ffffff;
+  color: #17202a;
+}
+
+.tab-add-button:hover {
+  background: #f2f4f7;
+}
+
+.tab-add-button:focus {
+  outline: 2px solid #245d9d;
+  outline-offset: 2px;
+}
+
+.tab-add-button--active {
+  background: #34a853 !important;
+  color: #ffffff !important;
+  border-color: #34a853 !important;
+}
+
+.tab-add-button--active:hover {
+  background: #2c8d45 !important;
+}
+
 .panel {
   padding: 24px;
   border-radius: 20px;
   background: #ffffff;
+}
+
+.new-record-input {
+  background: #ffffff !important;
+  color: #000000 !important;
+  caret-color: #000000 !important;
+  font-family: inherit;
+  font-size: 16px;
+}
+
+.new-record-input::placeholder {
+  color: #6c757d !important;
 }
 
 .panel__header {

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { StatusBadge } from "../../components/StatusBadge";
 import type { Phase0JudgementDraft, Phase0MessyRecord } from "./phase0-types";
 
@@ -31,10 +32,18 @@ const nextStepLabels: Record<
 export function Phase0JudgementCard({
   judgement,
   record,
+  onUpdateRecord,
 }: {
   judgement: Phase0JudgementDraft;
   record: Phase0MessyRecord;
+  onUpdateRecord?: (recordId: string, changes: Partial<Phase0MessyRecord>) => void;
 }) {
+  const initial = record.draftJudgement ?? null;
+  const [draft, setDraft] = useState<Phase0JudgementDraft | null>(initial ?? null);
+
+  useEffect(() => {
+    setDraft(record.draftJudgement ?? null);
+  }, [record.id, record.draftJudgement]);
   return (
     <article className="judgement-card">
       <div className="judgement-card__header">
@@ -88,6 +97,65 @@ export function Phase0JudgementCard({
             <li key={item}>{item}</li>
           ))}
         </ul>
+      </section>
+
+      <section style={{ marginTop: 12 }}>
+        <h4>人工整理草稿</h4>
+        {draft ? (
+          <div>
+            <label>
+              候選類型
+              <select value={draft.possibleKind} onChange={(e) => setDraft({ ...draft, possibleKind: e.target.value as Phase0JudgementDraft["possibleKind"] })}>
+                {(Object.entries(kindLabels) as Array<[Phase0JudgementDraft["possibleKind"], string]>).map(([k, label]) => (
+                  <option key={k} value={k}>{label}</option>
+                ))}
+              </select>
+            </label>
+            <label>
+              信心程度
+              <select value={draft.confidence} onChange={(e) => setDraft({ ...draft, confidence: e.target.value as Phase0JudgementDraft["confidence"] })}>
+                {(Object.entries(confidenceLabels) as Array<[Phase0JudgementDraft["confidence"], string]>).map(([k, label]) => (
+                  <option key={k} value={k}>{label}</option>
+                ))}
+              </select>
+            </label>
+            <label>
+              下一步
+              <select value={draft.suggestedNextStep} onChange={(e) => setDraft({ ...draft, suggestedNextStep: e.target.value as Phase0JudgementDraft["suggestedNextStep"] })}>
+                {(Object.entries(nextStepLabels) as Array<[Phase0JudgementDraft["suggestedNextStep"], string]>).map(([k, label]) => (
+                  <option key={k} value={k}>{label}</option>
+                ))}
+              </select>
+            </label>
+            <label>
+              人類審查註記
+              <textarea value={draft.humanReviewNote ?? ""} onChange={(e) => setDraft({ ...draft, humanReviewNote: e.target.value })} rows={4} style={{ width: '100%' }} />
+            </label>
+
+            <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+              <button type="button" onClick={() => onUpdateRecord?.(record.id, { draftJudgement: draft } as any)}>儲存判斷草稿</button>
+              <button type="button" onClick={() => { setDraft(null); onUpdateRecord?.(record.id, { draftJudgement: undefined } as any); }}>刪除判斷草稿</button>
+              <button type="button" onClick={() => setDraft((record as any).draftJudgement ?? null)}>重設</button>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <button type="button" onClick={() => {
+              const newDraft: Phase0JudgementDraft = {
+                messyRecordId: record.id,
+                possibleKind: judgement.possibleKind,
+                confidence: judgement.confidence,
+                evidence: judgement.evidence,
+                blockers: judgement.blockers,
+                suggestedNextStep: judgement.suggestedNextStep,
+                unsafeToActDirectly: judgement.unsafeToActDirectly,
+                humanReviewNote: ''
+              };
+              setDraft(newDraft);
+              onUpdateRecord?.(record.id, { draftJudgement: newDraft } as any);
+            }}>建立判斷草稿</button>
+          </div>
+        )}
       </section>
     </article>
   );

@@ -8,14 +8,23 @@ export function Phase0Workbench({
   records,
   selectedRecordId,
   onSelect,
+  onUpdateRecord,
+  onDeleteRecord,
 }: {
   records: Phase0MessyRecord[];
   selectedRecordId: string;
   onSelect: (recordId: string) => void;
+  onUpdateRecord?: (recordId: string, changes: Partial<Phase0MessyRecord>) => void;
+  onDeleteRecord?: (recordId: string) => void;
 }) {
   const selectedRecord =
     records.find((record) => record.id === selectedRecordId) ?? records[0];
+
   const safetyBoundary = createPhase0Judgement(selectedRecord);
+
+  function saveRawTextContent(rawText: string) {
+    onUpdateRecord?.(selectedRecord.id, { rawText } as any);
+  }
 
   return (
     <div className="workbench">
@@ -31,24 +40,68 @@ export function Phase0Workbench({
       <div className="workbench__layout">
         <aside className="workbench__queue" aria-label="選擇原始資訊">
           {records.map((record) => (
-            <button
-              className={record.id === selectedRecord.id ? "active" : ""}
-              key={record.id}
-              type="button"
-              onClick={() => onSelect(record.id)}
-            >
-              <span>{record.id}</span>
-              <StatusBadge status={record.verificationStatus} />
-            </button>
+            <div key={record.id} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+              <button
+                className={record.id === selectedRecord.id ? "active" : ""}
+                type="button"
+                style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                onClick={() => onSelect(record.id)}
+              >
+                <span>{record.id}</span>
+                <StatusBadge status={record.verificationStatus} />
+              </button>
+              <button
+                type="button"
+                style={{ padding: '6px 10px', borderRadius: '999px', border: '1px solid #dbe4ef', background: '#f8f9fa', cursor: 'pointer' }}
+                onClick={() => {
+                  if (window.confirm(`確定要刪除 ${record.id} 嗎？`)) {
+                    onDeleteRecord?.(record.id);
+                  }
+                }}
+              >
+                刪除
+              </button>
+            </div>
           ))}
         </aside>
 
         <div className="workbench__main">
-          <RecordCard record={selectedRecord} />
+          <RecordCard record={selectedRecord} onUpdateRecord={onUpdateRecord} />
+
+          <div style={{ margin: "12px 0" }}>
+            <strong>驗證操作：</strong>
+            <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+              <button
+                type="button"
+                onClick={() =>
+                  onUpdateRecord?.(selectedRecord.id, { verificationStatus: "verified" })
+                }
+              >
+                標為 verified
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  onUpdateRecord?.(selectedRecord.id, { verificationStatus: "needs_review" })
+                }
+              >
+                標為 needs_review
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  onUpdateRecord?.(selectedRecord.id, { verificationStatus: "unverified" })
+                }
+              >
+                標為 unverified
+              </button>
+            </div>
+          </div>
 
           <Phase0JudgementCard
             judgement={safetyBoundary}
             record={selectedRecord}
+            onUpdateRecord={onUpdateRecord}
           />
         </div>
 
