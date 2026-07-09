@@ -67,11 +67,14 @@ describe("App", () => {
 
     render(<App />);
 
-    expect(screen.getByText("V1 版整理檢視")).toBeInTheDocument();
-    expect(
-      screen.getByText(/資料來源仍來自 Phase 0 原始資訊/),
-    ).toBeInTheDocument();
+    expect(screen.getByText("行動前資訊檢查工作台")).toBeInTheDocument();
+    expect(screen.getByText(/先保存 Phase 0 原始資訊/)).toBeInTheDocument();
+    expect(screen.getByText("流程檢查")).toBeInTheDocument();
+    expect(screen.getByText("人工判斷紀錄")).toBeInTheDocument();
+    expect(screen.getByText("候選結果，不是任務")).toBeInTheDocument();
     expect(screen.getAllByText("待人工確認").length).toBeGreaterThan(0);
-    expect(screen.queryByRole("button", { name: "原始資訊" })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "原始資訊" }),
+    ).not.toBeInTheDocument();
   });
 });

@@ -31,6 +31,7 @@
 | 11:38 | Phase 0 | 新增工作台刪除按鈕 | Agent 建議在 `整理工作台` 每筆原始資訊旁新增「刪除」按鈕，讓使用者能直接移除不需要的紀錄。 | 採用 | 採用：符合使用者需求與 UI 優化，並避免保留不必要資料。 | `src/app/App.tsx`, `src/features/phase-0/Phase0Workbench.tsx` |
 | 14:20 | Phase 0 | 啟用 persona sub-agent 模擬使用者訪談 | Agent 建議根據 `release-packs/01-interview-kit/docs/personas/*.md` 的三個 persona，針對目前 prototype 提供使用者回饋，並整理成 `release-packs/01-interview-kit/docs/interview-notes.md`。 | 採用 | 採用：這是課程要求的使用者訪談模擬，且能讓我們更早看見不同角色對介面的關注點；人類仍保留最後修訂權，並補上不應被視為正式需求的提醒。 | `release-packs/01-interview-kit/docs/interview-notes.md`, `docs/ai-log.md` |
 | 15:10 | Release 02 | 建立流程設計草稿 | Agent 建議把原始資訊、人工確認、候選結果與判斷紀錄整理成 Mermaid flowchart，並加入「暫不採用」分支，避免未確認內容被直接視為任務。 | 採用 | 採用：這個流程把「資訊是否足夠」與「是否可成為任務」拆開，並保留人工確認與判斷理由紀錄，符合流程設計要求。 | `release-packs/02-flow-design-kit/docs/flow.md` |
+| 16:20 | v1 | 依 `flow.md` 實作 `/v1/` 前端 | Agent 建議新增 v1 行動前資訊檢查工作台，將 Phase 0 原始資訊依來源保留、欄位檢查、衝突檢查、人工確認與判斷紀錄呈現，並從首頁連到 `/v1/`。 | 採用（需人工再檢查） | 採用：符合「未確認內容不能直接變成任務」的流程設計；仍需人類檢查每筆資訊是否真的足夠形成候選結果，AI 不負責救災判斷。 | `src/app/App.tsx`, `src/features/v1/V1FlowWorkbench.tsx`, `src/styles/global.css` |
 
 ## 範例
 
@@ -50,12 +51,10 @@
 
 ### 下次使用 AI 開發前，我們會先準備
 
-
 ### 本次簡短採用記錄
 
 - Agent 執行：格式化、測試、建置檢查、啟動 dev server（供展示）。
 - Agent 產出：`docs/phase0-observations.md` 草稿、`messy-reports` 摘要與需人工確認樣本清單。
-- 人類採用決策：接受草稿作為內部觀察草案，保留 `needs_review` 標記，不將任何未驗證資訊標為已確認。 
-
+- 人類採用決策：接受草稿作為內部觀察草案，保留 `needs_review` 標記，不將任何未驗證資訊標為已確認。
 
 -
