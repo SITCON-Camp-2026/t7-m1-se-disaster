@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { SourceLabel } from "./SourceLabel";
 import { StatusBadge } from "./StatusBadge";
 import { formatDateTime } from "../lib/date";
-import { QUALITY_ISSUE_LABELS, QUALITY_ISSUE_COLORS, computeSeverityForIssues, QUALITY_SEVERITY_COLORS } from "../features/phase-0/quality-issues";
+import { QUALITY_ISSUE_LABELS, QUALITY_ISSUE_COLORS, QUALITY_SEVERITY_COLORS, resolveRecordSeverity } from "../features/phase-0/quality-issues";
 
 type RecordLike = {
   id: string;
@@ -32,9 +32,9 @@ export function RecordCard({ record, onUpdateRecord }: { record: RecordLike; onU
         <h3>{title}</h3>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <StatusBadge status={record.verificationStatus} />
-          {record.qualityIssues && record.qualityIssues.length > 0 ? (
+          {(record.qualityIssues && record.qualityIssues.length > 0) || record.qualitySeverity ? (
             (() => {
-              const sev = computeSeverityForIssues(record.qualityIssues);
+              const sev = resolveRecordSeverity(record);
               const label = sev === 'high' ? '品質：高' : sev === 'medium' ? '品質：中' : '品質：低';
               return (
                 <span style={{ padding: '2px 6px', background: QUALITY_SEVERITY_COLORS[sev] ?? '#e9ecef', borderRadius: 4, fontSize: 12 }}>
