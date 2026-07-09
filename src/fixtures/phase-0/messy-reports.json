@@ -24,6 +24,7 @@
     "annotationsNeeded": ["inventory", "timestamp"],
     "reviewNotes": "上午盤點提及雨鞋有庫存，建議與較晚的現場盤點比對以確認當前庫存。",
     "qualityIssues": ["no_late_timestamp", "uncertain_current_status"],
+    "qualitySeverity": "low",
     "draft": {
       "editable": true,
       "content": "溪畔活動中心早上還有雨鞋，但不知道下午還有沒有。",
@@ -57,6 +58,7 @@
     "annotationsNeeded": ["source_date", "official_confirm"],
     "reviewNotes": "截圖來源與日期不明，需查證是否為官方公告並確認適用時段，暫勿依此調度路線。",
     "qualityIssues": ["unknown_source_date", "unverified_official_status"],
+    "qualitySeverity": "low",
     "draft": {
       "editable": true,
       "content": "截圖寫『中午前道路封閉』，但不知道截圖是哪一天，也不知道是不是官方公告。",
@@ -72,6 +74,7 @@
     "sourceType": "field_report",
     "verificationStatus": "needs_review",
     "qualityIssues": ["conflicting_on_site_reports", "uncertain_safety"],
+    "qualitySeverity": "medium",
     "updatedAt": "2026-07-20T11:02:00+08:00"
   },
   {
@@ -88,6 +91,7 @@
     "sourceType": "field_report",
     "verificationStatus": "needs_review",
     "qualityIssues": ["unclear_reason", "actionable_without_context"],
+    "qualitySeverity": "low",
     "updatedAt": "2026-07-20T11:35:00+08:00"
   },
   {
@@ -113,6 +117,7 @@
     "sourceType": "volunteer_update",
     "verificationStatus": "needs_review",
     "qualityIssues": ["time_sensitive", "needs_recheck_at_timestamp"],
+    "qualitySeverity": "high",
     "updatedAt": "2026-07-20T14:35:00+08:00"
   },
   {
@@ -124,6 +129,7 @@
     "sensitive": true,
     "reviewNotes": "含個資且未確認同意，請先聯絡當事人或由現場志工協助取得同意，再評估是否建立任務。",
     "qualityIssues": ["personal_data", "no_consent"],
+    "qualitySeverity": "medium",
     "draft": {
       "editable": true,
       "content": "現場志工代一位不方便使用手機的長者轉述：住家泥水已退，但需要協助搬動大型家具。志工只知道位置在大進路口往溪邊方向第二排住家，尚未確認長者是否同意公開完整地址。",
