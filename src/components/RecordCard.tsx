@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SourceLabel } from "./SourceLabel";
 import { StatusBadge } from "./StatusBadge";
 import { formatDateTime } from "../lib/date";
@@ -21,6 +21,10 @@ export function RecordCard({ record, onUpdateRecord }: { record: RecordLike; onU
   const description = record.rawText ?? record.description;
   const initialDraft = (record as any).draft ?? null;
   const [draftContent, setDraftContent] = useState(initialDraft?.content ?? "");
+
+  useEffect(() => {
+    setDraftContent(((record as any).draft && (record as any).draft.content) ?? "");
+  }, [record.id, (record as any).draft]);
   return (
     <article className="record-card">
       <div className="record-card__header">
@@ -77,6 +81,14 @@ export function RecordCard({ record, onUpdateRecord }: { record: RecordLike; onU
             <button
               type="button"
               onClick={() => {
+                onUpdateRecord?.(record.id, { draft: undefined } as any);
+              }}
+            >
+              刪除草稿
+            </button>
+            <button
+              type="button"
+              onClick={() => {
                 setDraftContent(initialDraft.content ?? "");
                 onUpdateRecord?.(record.id, { draft: { ...(initialDraft as any), content: initialDraft.content, lastEditedAt: initialDraft.lastEditedAt, lastEditedBy: initialDraft.lastEditedBy } } as any);
               }}
@@ -84,6 +96,27 @@ export function RecordCard({ record, onUpdateRecord }: { record: RecordLike; onU
               重設
             </button>
           </div>
+        </div>
+      ) : null}
+
+      {!initialDraft ? (
+        <div style={{ marginTop: 12 }}>
+          <button
+            type="button"
+            onClick={() => {
+              const newDraft = {
+                editable: true,
+                content: record.rawText ?? record.description ?? "",
+                status: 'draft',
+                lastEditedAt: new Date().toISOString(),
+                lastEditedBy: 'local'
+              } as any;
+              onUpdateRecord?.(record.id, { draft: newDraft } as any);
+              setDraftContent(newDraft.content);
+            }}
+          >
+            建立草稿
+          </button>
         </div>
       ) : null}
     </article>
