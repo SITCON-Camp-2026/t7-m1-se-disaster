@@ -93,11 +93,11 @@ export function computeSeverityForIssues(issues: string[] | undefined): "low" | 
   }
   return best;
 }
-+
-+export function resolveRecordSeverity(record: { qualitySeverity?: string; qualityIssues?: string[] }): "low" | "medium" | "high" {
-+  if (record.qualitySeverity === 'low' || record.qualitySeverity === 'medium' || record.qualitySeverity === 'high') {
-+    return record.qualitySeverity;
-+  }
-+  return computeSeverityForIssues(record.qualityIssues);
-+}
+
+export function resolveRecordSeverity(record: { qualitySeverity?: string; qualityIssues?: string[] }): "low" | "medium" | "high" {
+  if (record.qualitySeverity === 'low' || record.qualitySeverity === 'medium' || record.qualitySeverity === 'high') {
+    return record.qualitySeverity;
+  }
+  return computeSeverityForIssues(record.qualityIssues);
+}
 

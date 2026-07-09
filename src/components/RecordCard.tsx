@@ -15,17 +15,27 @@ type RecordLike = {
   updatedAt: string;
   annotationsNeeded?: string[];
   sensitive?: boolean;
+  qualitySeverity?: string;
+  draft?: {
+    editable: boolean;
+    content: string;
+    status: string;
+    lastEditedAt: string | null;
+    lastEditedBy: string | null;
+  };
 };
 
 export function RecordCard({ record, onUpdateRecord }: { record: RecordLike; onUpdateRecord?: (recordId: string, changes: Partial<RecordLike>) => void; }) {
   const title = record.title ?? record.name ?? record.id;
   const description = record.rawText ?? record.description;
-  const initialDraft = (record as any).draft ?? null;
-  const [draftContent, setDraftContent] = useState(initialDraft?.content ?? "");
+  const recordQualitySeverity = (record as any).qualitySeverity as string | undefined;
+  const [selectedSeverity, setSelectedSeverity] = useState(recordQualitySeverity ?? "");
+  const [rawTextValue, setRawTextValue] = useState(record.rawText ?? "");
 
   useEffect(() => {
-    setDraftContent(((record as any).draft && (record as any).draft.content) ?? "");
-  }, [record.id, (record as any).draft]);
+    setSelectedSeverity(recordQualitySeverity ?? "");
+    setRawTextValue(record.rawText ?? "");
+  }, [record.id, recordQualitySeverity, record.rawText]);
   return (
     <article className="record-card">
       <div className="record-card__header">
@@ -49,6 +59,35 @@ export function RecordCard({ record, onUpdateRecord }: { record: RecordLike; onU
       <div className="record-card__meta">
         <SourceLabel sourceType={record.sourceType} />
         <span>更新：{formatDateTime(record.updatedAt)}</span>
+      </div>
+
+      <div style={{ marginTop: 16 }}>
+        <label htmlFor="raw-text-input" style={{ display: 'block', marginBottom: 8, fontWeight: 600 }}>
+          原始資訊內容
+        </label>
+        <textarea
+          id="raw-text-input"
+          value={rawTextValue}
+          onChange={(event) => setRawTextValue(event.target.value)}
+          rows={6}
+          style={{ width: '100%', padding: 8, borderRadius: 8, border: '1px solid #ced4da' }}
+        />
+        <div style={{ marginTop: 8, display: 'flex', gap: 8 }}>
+          <button
+            type="button"
+            onClick={() => {
+              onUpdateRecord?.(record.id, { rawText: rawTextValue } as any);
+            }}
+          >
+            儲存原始內容
+          </button>
+          <button
+            type="button"
+            onClick={() => setRawTextValue(record.rawText ?? "")}
+          >
+            重設內容
+          </button>
+        </div>
       </div>
 
       {record.annotationsNeeded && record.annotationsNeeded.length > 0 ? (
@@ -77,72 +116,26 @@ export function RecordCard({ record, onUpdateRecord }: { record: RecordLike; onU
         </div>
       ) : null}
 
-      {initialDraft ? (
-        <div style={{ marginTop: 12 }}>
-          <h4>整理草稿</h4>
-          <textarea
-            value={draftContent}
-            onChange={(e) => setDraftContent(e.target.value)}
-            rows={6}
-            style={{ width: '100%', padding: 8 }}
-          />
-          <div style={{ marginTop: 8, display: 'flex', gap: 8 }}>
-            <button
-              type="button"
-              onClick={() => {
-                onUpdateRecord?.(record.id, {
-                  draft: {
-                    ...(initialDraft as any),
-                    content: draftContent,
-                    lastEditedAt: new Date().toISOString(),
-                    lastEditedBy: 'local'
-                  }
-                } as any);
-              }}
-            >
-              儲存草稿
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                onUpdateRecord?.(record.id, { draft: undefined } as any);
-              }}
-            >
-              刪除草稿
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setDraftContent(initialDraft.content ?? "");
-                onUpdateRecord?.(record.id, { draft: { ...(initialDraft as any), content: initialDraft.content, lastEditedAt: initialDraft.lastEditedAt, lastEditedBy: initialDraft.lastEditedBy } } as any);
-              }}
-            >
-              重設
-            </button>
-          </div>
-        </div>
-      ) : null}
-
-      {!initialDraft ? (
-        <div style={{ marginTop: 12 }}>
-          <button
-            type="button"
-            onClick={() => {
-              const newDraft = {
-                editable: true,
-                content: record.rawText ?? record.description ?? "",
-                status: 'draft',
-                lastEditedAt: new Date().toISOString(),
-                lastEditedBy: 'local'
-              } as any;
-              onUpdateRecord?.(record.id, { draft: newDraft } as any);
-              setDraftContent(newDraft.content);
-            }}
-          >
-            建立草稿
-          </button>
-        </div>
-      ) : null}
+      <div style={{ marginTop: 12 }}>
+        <label htmlFor="quality-severity" style={{ display: 'block', marginBottom: 8, fontWeight: 600 }}>
+          編輯資料品質
+        </label>
+        <select
+          id="quality-severity"
+          value={selectedSeverity}
+          onChange={(e) => {
+            const value = e.target.value;
+            setSelectedSeverity(value);
+            onUpdateRecord?.(record.id, { qualitySeverity: value || undefined } as any);
+          }}
+          style={{ padding: '8px', width: '100%', borderRadius: 6, border: '1px solid #ced4da' }}
+        >
+          <option value="">未指定</option>
+          <option value="high">品質高</option>
+          <option value="medium">品質中</option>
+          <option value="low">品質低</option>
+        </select>
+      </div>
     </article>
   );
 }

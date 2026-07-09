@@ -22,6 +22,8 @@ export function App() {
   const [selectedRecordId, setSelectedRecordId] = useState(
     records[0]?.id ?? "",
   );
+  const [newRecordText, setNewRecordText] = useState("");
+  const [isCreatingRecord, setIsCreatingRecord] = useState(false);
 
   function selectForWorkbench(recordId: string) {
     setSelectedRecordId(recordId);
@@ -30,6 +32,68 @@ export function App() {
 
   function updateRecord(recordId: string, changes: Partial<Phase0MessyRecord>) {
     setRecords((prev) => prev.map((r) => (r.id === recordId ? { ...r, ...changes } : r)));
+  }
+
+  function deleteRecord(recordId: string) {
+    setRecords((prev) => {
+      const nextRecords = prev.filter((record) => record.id !== recordId);
+      if (selectedRecordId === recordId) {
+        setSelectedRecordId(nextRecords[0]?.id ?? "");
+      }
+      return nextRecords;
+    });
+  }
+
+  function getNextRecordId(existingRecords: Phase0MessyRecord[]) {
+    const currentNumbers = existingRecords
+      .map((record) => {
+        const match = record.id.match(/^M-(\d+)$/);
+        return match ? Number(match[1]) : NaN;
+      })
+      .filter((value) => !Number.isNaN(value));
+
+    const maxExisting = currentNumbers.length > 0 ? Math.max(...currentNumbers) : 0;
+    const nextNumber = Math.max(maxExisting + 1, 13);
+
+    return `M-${String(nextNumber).padStart(3, "0")}`;
+  }
+
+  function addRecord() {
+    setIsCreatingRecord(true);
+  }
+
+  function cancelCreateRecord() {
+    setIsCreatingRecord(false);
+    setNewRecordText("");
+  }
+
+  function createRecord() {
+    if (!newRecordText.trim()) {
+      window.alert("請先輸入新增資料內容，再按送出新增。");
+      return;
+    }
+
+    if (!window.confirm("確定要新增這筆資料嗎？按取消將不會新增。")) {
+      return;
+    }
+
+    const newRecordId = getNextRecordId(records);
+    const newRecord: Phase0MessyRecord = {
+      id: newRecordId,
+      rawText: newRecordText,
+      sourceType: "不明來源",
+      updatedAt: new Date().toISOString(),
+      verificationStatus: "unverified",
+      annotationsNeeded: [],
+      qualityIssues: [],
+      sensitive: false,
+    };
+
+    setRecords((prev) => [...prev, newRecord]);
+    setSelectedRecordId(newRecord.id);
+    setActiveTab("workbench");
+    setNewRecordText("");
+    setIsCreatingRecord(false);
   }
 
   return (
@@ -54,7 +118,49 @@ export function App() {
             {tab.label}
           </button>
         ))}
+        <button
+          type="button"
+          className={`tab-add-button ${isCreatingRecord ? 'tab-add-button--active' : ''}`}
+          onClick={addRecord}
+        >
+          新增資料
+        </button>
       </nav>
+      {isCreatingRecord ? (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
+          <label htmlFor="new-record-content" style={{ fontWeight: 600 }}>
+            新增資料內容
+          </label>
+          <textarea
+            id="new-record-content"
+            className="new-record-input"
+            value={newRecordText}
+            onChange={(event) => setNewRecordText(event.target.value)}
+            rows={4}
+            style={{
+              width: '100%',
+              padding: 10,
+              borderRadius: 12,
+              border: '1px solid #cfd8e3',
+              backgroundColor: '#ffffff',
+              color: '#000000',
+              caretColor: '#000000',
+              fontFamily: 'inherit',
+              fontSize: 16,
+              lineHeight: 1.5,
+            }}
+            placeholder="請在這裡輸入要新增的原始資訊內容"
+          />
+          <div style={{ display: 'flex', gap: 12 }}>
+            <button type="button" onClick={createRecord}>
+              送出新增
+            </button>
+            <button type="button" onClick={cancelCreateRecord}>
+              取消
+            </button>
+          </div>
+        </div>
+      ) : null}
 
       <section className="panel">
         {records.length === 0 ? (
@@ -71,6 +177,7 @@ export function App() {
             selectedRecordId={selectedRecordId}
             onSelect={setSelectedRecordId}
             onUpdateRecord={updateRecord}
+            onDeleteRecord={deleteRecord}
           />
         )}
       </section>
