@@ -46,7 +46,7 @@ export function Phase0Workbench({
         </aside>
 
         <div className="workbench__main">
-          <RecordCard record={selectedRecord} />
+          <RecordCard record={selectedRecord} onUpdateRecord={onUpdateRecord} />
 
           <div style={{ margin: "12px 0" }}>
             <strong>驗證操作：</strong>

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { SourceLabel } from "./SourceLabel";
 import { StatusBadge } from "./StatusBadge";
 import { formatDateTime } from "../lib/date";
@@ -15,9 +16,11 @@ type RecordLike = {
   sensitive?: boolean;
 };
 
-export function RecordCard({ record }: { record: RecordLike }) {
+export function RecordCard({ record, onUpdateRecord }: { record: RecordLike; onUpdateRecord?: (recordId: string, changes: Partial<RecordLike>) => void; }) {
   const title = record.title ?? record.name ?? record.id;
   const description = record.rawText ?? record.description;
+  const initialDraft = (record as any).draft ?? null;
+  const [draftContent, setDraftContent] = useState(initialDraft?.content ?? "");
   return (
     <article className="record-card">
       <div className="record-card__header">
@@ -43,6 +46,44 @@ export function RecordCard({ record }: { record: RecordLike }) {
       {record.sensitive ? (
         <div style={{ marginTop: 8 }}>
           <span style={{ color: '#721c24', background: '#f8d7da', padding: '2px 6px', borderRadius: 4, fontSize: 12 }}>敏感資訊，需取得當事人同意</span>
+        </div>
+      ) : null}
+
+      {initialDraft ? (
+        <div style={{ marginTop: 12 }}>
+          <h4>整理草稿</h4>
+          <textarea
+            value={draftContent}
+            onChange={(e) => setDraftContent(e.target.value)}
+            rows={6}
+            style={{ width: '100%', padding: 8 }}
+          />
+          <div style={{ marginTop: 8, display: 'flex', gap: 8 }}>
+            <button
+              type="button"
+              onClick={() => {
+                onUpdateRecord?.(record.id, {
+                  draft: {
+                    ...(initialDraft as any),
+                    content: draftContent,
+                    lastEditedAt: new Date().toISOString(),
+                    lastEditedBy: 'local'
+                  }
+                } as any);
+              }}
+            >
+              儲存草稿
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setDraftContent(initialDraft.content ?? "");
+                onUpdateRecord?.(record.id, { draft: { ...(initialDraft as any), content: initialDraft.content, lastEditedAt: initialDraft.lastEditedAt, lastEditedBy: initialDraft.lastEditedBy } } as any);
+              }}
+            >
+              重設
+            </button>
+          </div>
         </div>
       ) : null}
     </article>
