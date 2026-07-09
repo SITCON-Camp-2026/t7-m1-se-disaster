@@ -8,10 +8,12 @@ export function Phase0Workbench({
   records,
   selectedRecordId,
   onSelect,
+  onUpdateRecord,
 }: {
   records: Phase0MessyRecord[];
   selectedRecordId: string;
   onSelect: (recordId: string) => void;
+  onUpdateRecord?: (recordId: string, changes: Partial<Phase0MessyRecord>) => void;
 }) {
   const selectedRecord =
     records.find((record) => record.id === selectedRecordId) ?? records[0];
@@ -45,6 +47,36 @@ export function Phase0Workbench({
 
         <div className="workbench__main">
           <RecordCard record={selectedRecord} />
+
+          <div style={{ margin: "12px 0" }}>
+            <strong>驗證操作：</strong>
+            <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+              <button
+                type="button"
+                onClick={() =>
+                  onUpdateRecord?.(selectedRecord.id, { verificationStatus: "verified" })
+                }
+              >
+                標為 verified
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  onUpdateRecord?.(selectedRecord.id, { verificationStatus: "needs_review" })
+                }
+              >
+                標為 needs_review
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  onUpdateRecord?.(selectedRecord.id, { verificationStatus: "unverified" })
+                }
+              >
+                標為 unverified
+              </button>
+            </div>
+          </div>
 
           <Phase0JudgementCard
             judgement={safetyBoundary}

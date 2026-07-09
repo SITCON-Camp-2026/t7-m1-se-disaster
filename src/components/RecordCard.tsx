@@ -11,6 +11,8 @@ type RecordLike = {
   sourceType: string;
   verificationStatus: string;
   updatedAt: string;
+  annotationsNeeded?: string[];
+  sensitive?: boolean;
 };
 
 export function RecordCard({ record }: { record: RecordLike }) {
@@ -27,6 +29,22 @@ export function RecordCard({ record }: { record: RecordLike }) {
         <SourceLabel sourceType={record.sourceType} />
         <span>更新：{formatDateTime(record.updatedAt)}</span>
       </div>
+
+      {record.annotationsNeeded && record.annotationsNeeded.length > 0 ? (
+        <div className="record-card__annotations" style={{ marginTop: 8 }}>
+          {record.annotationsNeeded.map((a) => (
+            <span key={a} className="annotation-badge" style={{ marginRight: 6, padding: '2px 6px', background: '#fff3cd', borderRadius: 4, fontSize: 12 }}>
+              需確認：{a}
+            </span>
+          ))}
+        </div>
+      ) : null}
+
+      {record.sensitive ? (
+        <div style={{ marginTop: 8 }}>
+          <span style={{ color: '#721c24', background: '#f8d7da', padding: '2px 6px', borderRadius: 4, fontSize: 12 }}>敏感資訊，需取得當事人同意</span>
+        </div>
+      ) : null}
     </article>
   );
 }

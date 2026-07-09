@@ -37,6 +37,22 @@ export function Phase0RawInfoPanel({
               <SourceLabel sourceType={record.sourceType} />
               <span>更新：{formatDateTime(record.updatedAt)}</span>
             </div>
+            {record.annotationsNeeded && record.annotationsNeeded.length > 0 ? (
+              <div style={{ marginTop: 8 }}>
+                {record.annotationsNeeded.map((a) => (
+                  <span key={a} style={{ marginRight: 6, padding: '2px 6px', background: '#fff3cd', borderRadius: 4, fontSize: 12 }}>
+                    需確認：{a}
+                  </span>
+                ))}
+              </div>
+            ) : null}
+
+            {record.sensitive ? (
+              <div style={{ marginTop: 8 }}>
+                <span style={{ color: '#721c24', background: '#f8d7da', padding: '2px 6px', borderRadius: 4, fontSize: 12 }}>敏感資訊</span>
+              </div>
+            ) : null}
+
             <button type="button" onClick={() => onSelect(record.id)}>
               送到整理工作台
             </button>

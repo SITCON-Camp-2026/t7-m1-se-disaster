@@ -16,13 +16,20 @@ const phase0Records = messyReports satisfies Phase0MessyRecord[];
 
 export function App() {
   const [activeTab, setActiveTab] = useState<TabKey>("raw");
+  const [records, setRecords] = useState<Phase0MessyRecord[]>(
+    () => phase0Records.map((r) => ({ ...r })),
+  );
   const [selectedRecordId, setSelectedRecordId] = useState(
-    phase0Records[0]?.id ?? "",
+    records[0]?.id ?? "",
   );
 
   function selectForWorkbench(recordId: string) {
     setSelectedRecordId(recordId);
     setActiveTab("workbench");
+  }
+
+  function updateRecord(recordId: string, changes: Partial<Phase0MessyRecord>) {
+    setRecords((prev) => prev.map((r) => (r.id === recordId ? { ...r, ...changes } : r)));
   }
 
   return (
@@ -50,19 +57,20 @@ export function App() {
       </nav>
 
       <section className="panel">
-        {phase0Records.length === 0 ? (
+        {records.length === 0 ? (
           <EmptyState message="目前沒有資料" />
         ) : activeTab === "raw" ? (
           <Phase0RawInfoPanel
-            records={phase0Records}
+            records={records}
             selectedRecordId={selectedRecordId}
             onSelect={selectForWorkbench}
           />
         ) : (
           <Phase0Workbench
-            records={phase0Records}
+            records={records}
             selectedRecordId={selectedRecordId}
             onSelect={setSelectedRecordId}
+            onUpdateRecord={updateRecord}
           />
         )}
       </section>
