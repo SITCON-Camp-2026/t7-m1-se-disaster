@@ -3,32 +3,18 @@ import { SourceLabel } from "./SourceLabel";
 import { StatusBadge } from "./StatusBadge";
 import { formatDateTime } from "../lib/date";
 import { QUALITY_ISSUE_LABELS, QUALITY_ISSUE_COLORS, QUALITY_SEVERITY_COLORS, resolveRecordSeverity } from "../features/phase-0/quality-issues";
+import type { Phase0MessyRecord } from "../features/phase-0/phase0-types";
 
-type RecordLike = {
-  id: string;
+type RecordLike = Phase0MessyRecord & {
   title?: string;
   name?: string;
-  rawText?: string;
   description?: string;
-  sourceType: string;
-  verificationStatus: string;
-  updatedAt: string;
-  annotationsNeeded?: string[];
-  sensitive?: boolean;
-  qualitySeverity?: string;
-  draft?: {
-    editable: boolean;
-    content: string;
-    status: string;
-    lastEditedAt: string | null;
-    lastEditedBy: string | null;
-  };
 };
 
 export function RecordCard({ record, onUpdateRecord }: { record: RecordLike; onUpdateRecord?: (recordId: string, changes: Partial<RecordLike>) => void; }) {
   const title = record.title ?? record.name ?? record.id;
   const description = record.rawText ?? record.description;
-  const recordQualitySeverity = (record as any).qualitySeverity as string | undefined;
+  const recordQualitySeverity = record.qualitySeverity;
   const [selectedSeverity, setSelectedSeverity] = useState(recordQualitySeverity ?? "");
   const [rawTextValue, setRawTextValue] = useState(record.rawText ?? "");
 

@@ -38,12 +38,12 @@ export function Phase0JudgementCard({
   record: Phase0MessyRecord;
   onUpdateRecord?: (recordId: string, changes: Partial<Phase0MessyRecord>) => void;
 }) {
-  const initial = (record as any).draftJudgement ?? null;
+  const initial = record.draftJudgement ?? null;
   const [draft, setDraft] = useState<Phase0JudgementDraft | null>(initial ?? null);
 
   useEffect(() => {
-    setDraft((record as any).draftJudgement ?? null);
-  }, [record.id, (record as any).draftJudgement]);
+    setDraft(record.draftJudgement ?? null);
+  }, [record.id, record.draftJudgement]);
   return (
     <article className="judgement-card">
       <div className="judgement-card__header">
@@ -105,25 +105,25 @@ export function Phase0JudgementCard({
           <div>
             <label>
               候選類型
-              <select value={draft.possibleKind} onChange={(e) => setDraft({ ...draft, possibleKind: e.target.value as any })}>
-                {Object.keys(kindLabels).map((k) => (
-                  <option key={k} value={k}>{kindLabels[k as any]}</option>
+              <select value={draft.possibleKind} onChange={(e) => setDraft({ ...draft, possibleKind: e.target.value as Phase0JudgementDraft["possibleKind"] })}>
+                {(Object.entries(kindLabels) as Array<[Phase0JudgementDraft["possibleKind"], string]>).map(([k, label]) => (
+                  <option key={k} value={k}>{label}</option>
                 ))}
               </select>
             </label>
             <label>
               信心程度
-              <select value={draft.confidence} onChange={(e) => setDraft({ ...draft, confidence: e.target.value as any })}>
-                {Object.keys(confidenceLabels).map((k) => (
-                  <option key={k} value={k}>{confidenceLabels[k as any]}</option>
+              <select value={draft.confidence} onChange={(e) => setDraft({ ...draft, confidence: e.target.value as Phase0JudgementDraft["confidence"] })}>
+                {(Object.entries(confidenceLabels) as Array<[Phase0JudgementDraft["confidence"], string]>).map(([k, label]) => (
+                  <option key={k} value={k}>{label}</option>
                 ))}
               </select>
             </label>
             <label>
               下一步
-              <select value={draft.suggestedNextStep} onChange={(e) => setDraft({ ...draft, suggestedNextStep: e.target.value as any })}>
-                {Object.keys(nextStepLabels).map((k) => (
-                  <option key={k} value={k}>{nextStepLabels[k as any]}</option>
+              <select value={draft.suggestedNextStep} onChange={(e) => setDraft({ ...draft, suggestedNextStep: e.target.value as Phase0JudgementDraft["suggestedNextStep"] })}>
+                {(Object.entries(nextStepLabels) as Array<[Phase0JudgementDraft["suggestedNextStep"], string]>).map(([k, label]) => (
+                  <option key={k} value={k}>{label}</option>
                 ))}
               </select>
             </label>

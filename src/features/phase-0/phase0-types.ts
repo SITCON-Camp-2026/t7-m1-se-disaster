@@ -25,7 +25,7 @@ export type Phase0MessyRecord = {
   updatedAt: string;
   annotationsNeeded?: string[];
   qualityIssues?: string[];
-  qualitySeverity?: "low" | "medium" | "high";
+  qualitySeverity?: string;
   draft?: {
     editable: boolean;
     content: string;
@@ -33,6 +33,7 @@ export type Phase0MessyRecord = {
     lastEditedAt: string | null;
     lastEditedBy: string | null;
   };
+  draftJudgement?: Phase0JudgementDraft;
   sensitive?: boolean;
 };
 
